@@ -8,3 +8,5 @@ Ohhhh heaaaalll yea
 more text!
 
 Toritise check
+
+another check after library
