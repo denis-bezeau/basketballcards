@@ -36,9 +36,6 @@ public class CardDeck
 		DrawPile = new CardPile();
 		DiscardPile = new CardPile();
 		ExilePile = new CardPile();
-
-		//generate some cards for testing
-		GenerateTestCards();
 	}
 
 	public bool LegalCheckDeck (DeckRules testRules)
@@ -65,9 +62,12 @@ public class CardDeck
 		//generate 10 cards for the discard pile
 		for (int i = 0; i < 10; ++i)
 		{
-			Card newCard = new Card();
+			PlayerCard newCard = new PlayerCard();
 			newCard.Title = "discarded card " + i.ToString();
 			newCard.Description = "discarded description " + i.ToString();
+			newCard.FirstName = "FirstName" + i.ToString();
+			newCard.LastName = "LastName" + i.ToString();
+			newCard.Attributes = new PlayerAttributes(i, i);
 			DiscardPile.AddCard(newCard);
 			AllCards.AddCard(newCard);
 		}
@@ -201,5 +201,15 @@ public class CardDeck
 					break;
 				}
 		}
+	}
+
+	public void Save(string path)
+	{
+		DrawPile.Save(path);
+	}
+
+	public void Load(string path)
+	{
+		DrawPile.Load(path);
 	}
 }

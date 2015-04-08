@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 public class CardPile
 {
 	/// <summary>
 	/// List of cards in this pile
 	/// </summary>
-	private List<Card> cards;
-	
+	[XmlArray("cards")]
+	[XmlArrayItem("Card", typeof(Card))]
+	[XmlArrayItem("PlayerCard", typeof(PlayerCard))]
+	public List<Card> cards;
+
 	public CardPile()
 	{
 		//instantiate cardList
@@ -107,5 +113,25 @@ public class CardPile
 	{
 		//return true if the card list contains this card
 		return cards.Contains(possibleCard);
+	}
+
+	public void Save(string path)
+	{
+		var serializer = new XmlSerializer(typeof(CardPile));
+		using (var stream = new FileStream(path, FileMode.Create))
+		{
+			serializer.Serialize(stream, this);
+		}
+	}
+
+	public void Load(string path)
+	{
+		var serializer = new XmlSerializer(typeof(CardPile));
+		using (var stream = new FileStream(path, FileMode.Open))
+		{
+			CardPile cardpile = serializer.Deserialize(stream) as CardPile;
+			cards.Clear();
+			cards = cardpile.cards;
+		}
 	}
 }

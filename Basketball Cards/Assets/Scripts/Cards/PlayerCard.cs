@@ -1,28 +1,40 @@
+using System.Xml;
+using System.Xml.Serialization;
 
 public class PlayerCard : Card
 {
-	public string FirstName {
+	public string FirstName 
+	{
 		get;
-		private set;
+		set;
 	}
 
-	public string LastName {
+	public string LastName 
+	{
 		get;
-		private set;
+		set;
 	}
 
-	public string FullName {
-		get {
+	public string FullName 
+	{
+		get
+		{
 			return FirstName + " " + LastName;
 		}
 	}
 
-	public PlayerAttributes Attributes {
+	public PlayerAttributes Attributes
+	{
 		get;
-		private set;
+		set;
 	}
 
-	public PlayerCard (string firstName, string lastName, PlayerAttributes attributes)
+	public PlayerCard ()
+	{
+
+	}
+
+	public PlayerCard(string firstName, string lastName, PlayerAttributes attributes)
 	{
 		FirstName = firstName;
 		LastName = lastName;
