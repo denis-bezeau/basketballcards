@@ -13,7 +13,7 @@ public class Card
 
 	public Card()
 	{
-
+		CardValue = 0;
 	}
 
 	public string ToString()

@@ -36,6 +36,11 @@ public class GameMonitor : Singleton<GameMonitor>
 		CTEventManager.AddListener<GameEvents.PlayAction> (OnPlayAction);
 	}
 
+	private void Start()
+	{
+		InitializeNewGame();
+	}
+
 	private void OnDestroy()  	
 	{
 		CTEventManager.RemoveListener<GameEvents.PlayAction>(OnPlayAction);
@@ -83,12 +88,22 @@ public class GameMonitor : Singleton<GameMonitor>
 			users[i] = new User(i, "Player " + i, newDeck);
 		}
 		_game = new BasketballCardGame(users, DEBUG_WIN_SCORE);
+
+		// Flip a coin to see who goes first.
+		int flip = randomGenerator.Next(2);
+		
+		_currentUser = _game.Users[flip];
+		
+		// Game is initialized;
+		_game.IsInitialized = true;
+
 	}
 
 	public void StartGame()
 	{
 		if (_game != null)
 		{
+			Debug.Log ("Starting new game!");
 			// Draw each users starting hand.
 			for(int i = 0; i < _game.Users.Length; i++)
 			{
@@ -96,15 +111,15 @@ public class GameMonitor : Singleton<GameMonitor>
 				{
 					_game.Users[i].Hand.Add (_game.Users[i].Deck.DrawPile.DrawCard());
 				}
+
+				Debug.Log ("------------------ PRINTING STARTING HAND FOR USER: " + i + " ------------------");
+				foreach(Card c in _game.Users[i].Hand)
+				{
+					Debug.Log (c.Title + " " + c.Description + " " + c.CardValue);
+				}
+				Debug.Log ("------------------ END PRINTING STARTING HAND FOR USER: " + i + " ------------------");
 			}
-
-			// Flip a coin to see who goes first.
-			int flip = randomGenerator.Next(2);
-
-			_currentUser = _game.Users[flip];
-
-			// Game is initialized;
-			_game.IsInitialized = true;
+			BeginTurn (_currentUser);
 		}
 	}
 

@@ -31,10 +31,18 @@ public class BasketballCardGame
 		set { _isInitialized = value; }
 	}
 
+	private bool _started;
+	public bool Started
+	{
+		get { return _started; }
+		set { _started = value; }
+	}
+
 	// Default ctor, create a Basketball Card Game, set the users and the scores.
 	public BasketballCardGame(User[] users, int winScore)
 	{
 		_isInitialized = false;
+		_started = false;
 		_users = users;
 		_scores = new int[users.Length];
 		_winScore = WinScore;
