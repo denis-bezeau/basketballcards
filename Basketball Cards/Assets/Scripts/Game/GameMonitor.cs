@@ -85,6 +85,11 @@ public class GameMonitor : Singleton<GameMonitor>
 
 			newDeck.Save(path);
 
+			for(int k = 0; k < newDeck.DrawPile.cards.Count; k++)
+			{
+				newDeck.DrawPile.cards[k].CardValue = randomGenerator.Next(1, 20);
+			}
+
 			users[i] = new User(i, "Player " + i, newDeck);
 		}
 		_game = new BasketballCardGame(users, DEBUG_WIN_SCORE);
