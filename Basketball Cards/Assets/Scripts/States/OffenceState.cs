@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class OffenceState : MatchState
 {
@@ -7,10 +8,10 @@ public class OffenceState : MatchState
 	/// </summary>
 	public override void Begin ()
 	{
+		base.Begin();
 		if (GameMonitor.Instance.Game != null && !GameMonitor.Instance.Game.Started)
 		{
 			GameMonitor.Instance.StartGame();
-			base.Begin();
 		}
 	}
 }

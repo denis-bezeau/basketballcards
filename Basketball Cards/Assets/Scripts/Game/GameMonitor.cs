@@ -101,7 +101,6 @@ public class GameMonitor : Singleton<GameMonitor>
 		
 		// Game is initialized;
 		_game.IsInitialized = true;
-
 	}
 
 	public void StartGame()
@@ -131,8 +130,13 @@ public class GameMonitor : Singleton<GameMonitor>
 	// Start a turn.
 	public void BeginTurn(User user)
 	{
+		Debug.Log ("------------------ BEGINING TURN FOR USER: " + user.Id + " ------------------");
 		_currentUser = user;
-		_currentUser.Deck.DrawPile.DrawCard();
+		Card drawCard = _currentUser.Deck.DrawPile.DrawCard();
+
+		Debug.Log ("------------------ USER: " + user.Id + " drew card: " + drawCard.ToString() + " ------------------");
+
+		_currentUser.Hand.Add (drawCard);
 		_cardsInPlay = new Queue();
 		StopAllCoroutines();
 		StartCoroutine(MonitorTurn());
@@ -142,6 +146,7 @@ public class GameMonitor : Singleton<GameMonitor>
 	{
 		yield return StartCoroutine(ExecuteTurn());
 		_cardsInPlay = null;
+		Debug.Log ("------------------ ENDING TURN FOR USER: " + _currentUser.Id + " ------------------");
 	}
 
 	private IEnumerator ExecuteTurn()
@@ -161,12 +166,18 @@ public class GameMonitor : Singleton<GameMonitor>
 			// If the user has no playable card, execit the turn.
 			if(!hasPlayableCard)
 			{
+				Debug.Log ("------------------ User: " + _currentUser.Id + " has no more playable cards." + " ------------------");
 				yield break;
 			}
+
+			int randCard = randomGenerator.Next (0, _currentUser.Hand.Count);
+
+			_currentUser.PlayCard(_currentUser.Hand[randCard]);
 
 			// Does the user have cards to resolve?
 			if(_cardsInPlay.Count > 0)
 			{
+				Debug.Log ("------------------ User: " + _currentUser.Id + " is playing card: " + ((Card)_cardsInPlay.Peek()).ToString() + " ------------------");
 				Card playedCard = (Card)_cardsInPlay.Dequeue();
 				playedCard.Play();
 			}

@@ -10,7 +10,7 @@ public class User
 	private int _Id;
 	public int Id
 	{
-		get { return Id; }
+		get { return _Id; }
 	}
 
 	private string _userName;
@@ -42,6 +42,7 @@ public class User
 
 	public void PlayCard(Card card)
 	{
+		Debug.Log ("------------------ User: " + _Id + " is now attempting to play card: " + card.ToString());
 		// Card is playable
 		if (MatchStateManager.Instance.CurrentState.PlayableCardTypes.Contains(card.GetType()))
 		{
