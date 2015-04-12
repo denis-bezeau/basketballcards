@@ -53,7 +53,7 @@ public class CardPile
 	/// Gets the last card in the card list then removes it from the list
 	/// </summary>
 	/// <returns>if the card list is empty then this returns null, otherwise it returns the last card in the list</returns>
-	public Card DrawCard()
+	public Card DrawCard(int numToDraw = 1)
 	{
 		Card returnCard = null;
 		if (cards.Count <= 0)

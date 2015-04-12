@@ -12,22 +12,22 @@ public class CardDeck
 	/// <summary>
 	/// List of All cards
 	/// </summary>
-	private CardPile AllCards;
+	public CardPile AllCards;
 
 	/// <summary>
 	/// List of unplayed cards in a match
 	/// </summary>
-	private CardPile DrawPile;
+	public CardPile DrawPile;
 
 	/// <summary>
 	/// Cards played and discarded in a match
 	/// </summary>
-	private CardPile DiscardPile;
+	public CardPile DiscardPile;
 
 	/// <summary>
 	/// Cards played and Exiled in a match (Exiled cards can not be reshuffled back into your deck for any reason)
 	/// </summary>
-	private CardPile ExilePile;
+	public CardPile ExilePile;
 
 	public CardDeck ()
 	{
