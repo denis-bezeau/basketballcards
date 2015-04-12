@@ -9,6 +9,8 @@ public class Card
 
 	public string Description;
 
+	public int CardValue;
+
 	public Card()
 	{
 
@@ -17,5 +19,17 @@ public class Card
 	public string ToString()
 	{
 		return Title + ": " + Description;
+	}
+
+	public void Play()
+	{
+		if(MatchStateManager.Instance.CurrentState is OffenceState)
+		{
+			CTEventManager.FireEvent (new GameEvents.PlayAction () { PlayType = ePlayType.Offensive, PointValue = CardValue });
+		}
+		else if(MatchStateManager.Instance.CurrentState is DefenceState)
+		{
+			CTEventManager.FireEvent (new GameEvents.PlayAction () { PlayType = ePlayType.Defensive, PointValue = CardValue });
+		}
 	}
 }

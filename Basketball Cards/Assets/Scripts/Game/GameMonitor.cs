@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 using System;
 using System.Collections;
 using System.IO;
@@ -14,12 +13,34 @@ public class GameMonitor : Singleton<GameMonitor>
 	private static readonly int NUM_USERS = 2;
 	private static readonly int USER_HAND_SIZE = 5;
 	private static readonly int DEBUG_WIN_SCORE = 20;
+
+	private Queue _cardsInPlay;
 	
 	// Monitor Vars
 	private System.Random randomGenerator = new System.Random();
+
 	private BasketballCardGame _game;
+	public BasketballCardGame Game
+	{
+		get { return _game; }
+	}
+
+	private User _currentUser;
+
+	private BasketballPlay _currentPlay;
 
 	protected GameMonitor () {}
+
+	private void Awake()
+	{
+		CTEventManager.AddListener<GameEvents.PlayAction> (OnPlayAction);
+	}
+
+	private void OnDestroy()  	
+	{
+		CTEventManager.RemoveListener<GameEvents.PlayAction>(OnPlayAction);
+		base.OnDestroy();
+	}
 
 	public void InitializeNewGame()
 	{
@@ -80,7 +101,83 @@ public class GameMonitor : Singleton<GameMonitor>
 			// Flip a coin to see who goes first.
 			int flip = randomGenerator.Next(2);
 
-			// Start the state for turn one?
+			_currentUser = _game.Users[flip];
+
+			// Game is initialized;
+			_game.IsInitialized = true;
 		}
 	}
+
+	// Start a turn.
+	public void BeginTurn(User user)
+	{
+		_currentUser = user;
+		_currentUser.Deck.DrawPile.DrawCard();
+		_cardsInPlay = new Queue();
+		StopAllCoroutines();
+		StartCoroutine(MonitorTurn());
+	}
+
+	private IEnumerator MonitorTurn()
+	{
+		yield return StartCoroutine(ExecuteTurn());
+		_cardsInPlay = null;
+	}
+
+	private IEnumerator ExecuteTurn()
+	{
+		// Does the user have cards in hand?
+		while(_currentUser.Hand.Count > 0)
+		{
+			bool hasPlayableCard = false;
+			for(int i = 0; i < _currentUser.Hand.Count; i++)
+			{
+				if (MatchStateManager.Instance.CurrentState.PlayableCardTypes.Contains(_currentUser.Hand[i].GetType()))
+				{
+					hasPlayableCard = true;
+				}
+			}
+
+			// If the user has no playable card, execit the turn.
+			if(!hasPlayableCard)
+			{
+				yield break;
+			}
+
+			// Does the user have cards to resolve?
+			if(_cardsInPlay.Count > 0)
+			{
+				Card playedCard = (Card)_cardsInPlay.Dequeue();
+				playedCard.Play();
+			}
+			yield return null;
+		}
+		yield return null;
+	}
+
+	public void AddPlayedCard(Card card)
+	{
+		if(_cardsInPlay != null)
+		{
+			_cardsInPlay.Enqueue(card);
+		}
+	}
+
+	private void OnPlayAction(GameEvents.PlayAction eventInfo)
+	{
+		if(eventInfo.PlayType == ePlayType.Offensive)
+		{
+			_currentPlay.OffensiveValue = eventInfo.PointValue;
+		}
+		else if (eventInfo.PlayType == ePlayType.Defensive)
+		{
+			_currentPlay.DefensiveValue = eventInfo.PointValue;
+		}
+	}
+}
+
+public enum ePlayType
+{
+	Offensive = 0,
+	Defensive
 }

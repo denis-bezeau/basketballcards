@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Basic User class, should contain identification and deck information.
 /// </summary>
-using System.Collections.Generic;
-
-
 public class User 
 {
 	private int _Id;
@@ -40,5 +38,19 @@ public class User
 		_deck = deck;
 
 		_hand = new List<Card>();
+	}
+
+	public void PlayCard(Card card)
+	{
+		// Card is playable
+		if (MatchStateManager.Instance.CurrentState.PlayableCardTypes.Contains(card.GetType()))
+		{
+			GameMonitor.Instance.AddPlayedCard(card);
+		}
+		// Card isn't playable.
+		else
+		{
+			Debug.Log ("You cannot play this card.");
+		}
 	}
 }

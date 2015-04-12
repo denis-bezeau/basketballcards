@@ -24,9 +24,17 @@ public class BasketballCardGame
 		get { return _winScore; }
 	}
 
+	private bool _isInitialized;
+	public bool IsInitialized
+	{
+		get { return _isInitialized; }
+		set { _isInitialized = value; }
+	}
+
 	// Default ctor, create a Basketball Card Game, set the users and the scores.
 	public BasketballCardGame(User[] users, int winScore)
 	{
+		_isInitialized = false;
 		_users = users;
 		_scores = new int[users.Length];
 		_winScore = WinScore;

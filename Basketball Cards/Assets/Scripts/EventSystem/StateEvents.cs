@@ -7,5 +7,11 @@ namespace GameEvents
 	{
 		public Type StateType;
 	}
+
+	public class PlayAction : CTEvent
+	{
+		public ePlayType PlayType;
+		public int PointValue;
+	}
 }
 

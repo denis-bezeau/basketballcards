@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Controls the match's movement between states.
 /// </summary>
-public class MatchStateManager : MonoBehaviour
+public class MatchStateManager : Singleton<MatchStateManager>
 {
 	/// <summary>
 	/// Current state of the match.
@@ -24,6 +24,36 @@ public class MatchStateManager : MonoBehaviour
 	private void Start ()
 	{
 		TransitionToState (new InitialState ());
+	}
+
+	private void Update()
+	{
+		if(GameMonitor.Instance.Game != null)
+		{
+			if (currentState is InitialState)
+			{
+				if(GameMonitor.Instance.Game.IsInitialized)
+				{
+					currentState.StateComplete();
+				}
+			}
+			else if (currentState is OffenceState)
+			{
+
+			}
+			else if (currentState is DefenceState)
+			{
+
+			}
+			else if (currentState is ResolveState)
+			{
+
+			}
+			else if (currentState is PossessionChangeState)
+			{
+
+			}
+		}
 	}
 
 	/// <summary>

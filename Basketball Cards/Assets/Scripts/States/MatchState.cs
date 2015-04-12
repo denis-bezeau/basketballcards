@@ -11,7 +11,11 @@ public class MatchState
 	private bool offenceCanPlay = false;
 	private bool defenceCanPlay = false;
 	private List<Type> playableCardTypes = new List<Type> ();
-
+	public List<Type> PlayableCardTypes
+	{
+		get { return playableCardTypes; }
+	}
+	
 	/// <summary>
 	/// Call when moving to this state.
 	/// </summary>
